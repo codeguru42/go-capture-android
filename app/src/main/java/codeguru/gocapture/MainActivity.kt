@@ -1,10 +1,10 @@
 package codeguru.gocapture
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,6 +13,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun captureImage(view: View) {
-        Snackbar.make(view, "Button clicked", BaseTransientBottomBar.LENGTH_LONG).show()
+        val intent = Intent().apply {
+            action = MediaStore.ACTION_IMAGE_CAPTURE
+        }
+        startActivity(intent)
     }
 }

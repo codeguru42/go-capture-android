@@ -25,9 +25,7 @@ class MainFragment : Fragment() {
     }
 
     private fun captureImage() {
-        val intent = Intent().apply {
-            action = MediaStore.ACTION_IMAGE_CAPTURE
-        }
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivity(intent)
     }
 }

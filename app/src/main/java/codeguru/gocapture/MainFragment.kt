@@ -6,7 +6,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 
 class MainFragment : Fragment() {
@@ -15,7 +15,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
-        val button: Button = view.findViewById(R.id.camera_button)
+        val button: ImageButton = view.findViewById(R.id.camera_button)
         button.setOnClickListener {
             captureImage(it)
         }

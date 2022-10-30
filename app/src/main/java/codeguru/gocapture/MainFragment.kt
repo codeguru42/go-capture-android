@@ -30,13 +30,4 @@ class MainFragment : Fragment() {
         }
         startActivity(intent)
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            MainFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
-    }
 }

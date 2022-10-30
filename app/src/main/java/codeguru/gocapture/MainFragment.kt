@@ -17,14 +17,14 @@ class MainFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
         val button: ImageButton = view.findViewById(R.id.camera_button)
         button.setOnClickListener {
-            captureImage(it)
+            captureImage()
         }
 
         // Inflate the layout for this fragment
         return view
     }
 
-    private fun captureImage(view: View) {
+    private fun captureImage() {
         val intent = Intent().apply {
             action = MediaStore.ACTION_IMAGE_CAPTURE
         }

@@ -2,6 +2,5 @@
     <string name="app_name">Go Capture</string>
     <string name="capture_image_button">Capture Image</string>
     <string name="load_image_button">Load Image</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="loaded_image">Loaded Image</string>
 </resources>

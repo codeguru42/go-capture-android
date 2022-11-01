@@ -9,5 +9,16 @@
         android:id="@+id/mainFragment"
         android:name="codeguru.gocapture.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_image2"
+            app:destination="@id/imageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="codeguru.gocapture.ImageFragment"
+        android:label="fragment_image"
+        tools:layout="@layout/fragment_image" >
+        <argument android:name="imageUri" />
+    </fragment>
 </navigation>

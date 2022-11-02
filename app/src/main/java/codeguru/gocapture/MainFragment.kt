@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import java.io.File
 
 
@@ -23,6 +24,8 @@ class MainFragment : Fragment() {
         val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             Log.d(MainFragment::class.toString(), "get content result")
             Log.d(MainFragment::class.toString(), uri.toString())
+            val action = MainFragmentDirections.actionImage(uri.toString())
+            view.findNavController().navigate(action)
         }
 
         val takePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) { saved: Boolean ->

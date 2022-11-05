@@ -27,30 +27,30 @@ class MainFragment : Fragment() {
             val action = MainFragmentDirections.actionImage(uri.toString())
             view.findNavController().navigate(action)
         }
-
-        val takePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) { saved: Boolean ->
-            Log.d(MainFragment::class.toString(), "take picture result")
-            Log.d(MainFragment::class.toString(), saved.toString())
-        }
-
-        val cameraButton: ImageButton = view.findViewById(R.id.camera_button)
-        cameraButton.setOnClickListener {
-            val activity = requireActivity()
-            val file = File(activity.filesDir,"images/go_capture.png")
-            val imageUri = FileProvider.getUriForFile(
-                activity,
-                BuildConfig.APPLICATION_ID + ".images.provider",
-                file
-            )
-            takePicture.launch(imageUri)
-        }
-
         val imageButton: ImageButton = view.findViewById(R.id.image_button)
         imageButton.setOnClickListener {
             getContent.launch("image/*")
         }
 
-        // Inflate the layout for this fragment
+        val activity = requireActivity()
+        val file = File(activity.filesDir,"images/go_capture.png")
+        val imageUri = FileProvider.getUriForFile(
+            activity,
+            BuildConfig.APPLICATION_ID + ".images.provider",
+            file
+        )
+        val takePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) { saved: Boolean ->
+            Log.d(MainFragment::class.toString(), "take picture result")
+            Log.d(MainFragment::class.toString(), saved.toString())
+            val action = MainFragmentDirections.actionImage(imageUri.toString())
+            view.findNavController().navigate(action)
+        }
+
+        val cameraButton: ImageButton = view.findViewById(R.id.camera_button)
+        cameraButton.setOnClickListener {
+            takePicture.launch(imageUri)
+        }
+
         return view
     }
 }

@@ -33,7 +33,11 @@ class MainFragment : Fragment() {
         }
 
         val activity = requireActivity()
-        val file = File(activity.filesDir,"images/go_capture.png")
+        val imagesDir = File(activity.filesDir, "images")
+        if (!imagesDir.exists()) {
+            imagesDir.mkdir()
+        }
+        val file = File(imagesDir,"go_capture.png")
         val imageUri = FileProvider.getUriForFile(
             activity,
             BuildConfig.APPLICATION_ID + ".images.provider",

@@ -24,8 +24,10 @@ class MainFragment : Fragment() {
         val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             Log.d(MainFragment::class.toString(), "get content result")
             Log.d(MainFragment::class.toString(), uri.toString())
-            val action = MainFragmentDirections.actionImage(uri.toString())
-            view.findNavController().navigate(action)
+            if (uri != null) {
+                val action = MainFragmentDirections.actionImage(uri.toString())
+                view.findNavController().navigate(action)
+            }
         }
         val imageButton: ImageButton = view.findViewById(R.id.image_button)
         imageButton.setOnClickListener {
@@ -46,8 +48,10 @@ class MainFragment : Fragment() {
         val takePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) { saved: Boolean ->
             Log.d(MainFragment::class.toString(), "take picture result")
             Log.d(MainFragment::class.toString(), saved.toString())
-            val action = MainFragmentDirections.actionImage(imageUri.toString())
-            view.findNavController().navigate(action)
+            if (saved) {
+                val action = MainFragmentDirections.actionImage(imageUri.toString())
+                view.findNavController().navigate(action)
+            }
         }
 
         val cameraButton: ImageButton = view.findViewById(R.id.camera_button)

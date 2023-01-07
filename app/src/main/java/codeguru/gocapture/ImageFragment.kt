@@ -18,7 +18,7 @@ class ImageFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_image, container, false)
-        val imageView = view.findViewById<ImageView>(R.id.imageView)
+        val imageView = view.findViewById<ImageView>(R.id.image_view)
         imageView.setImageURI(Uri.parse(args.imageUri))
         return view
     }

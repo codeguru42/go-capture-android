@@ -12,11 +12,13 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import okhttp3.MediaType
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 
 
 class ImageFragment : Fragment() {
@@ -47,7 +49,13 @@ class ImageFragment : Fragment() {
             imageUri.lastPathSegment,
             RequestBody.create(MediaType.parse("image/*"), inputStream?.readBytes())
         )
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .writeTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
         val retrofit = Retrofit.Builder()
+            .client(okHttpClient)
             .baseUrl("http://192.168.1.2:8000/")
             .build()
         val service = retrofit.create(GoCaptureService::class.java)

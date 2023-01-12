@@ -10,14 +10,19 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
 
@@ -60,12 +65,33 @@ class ImageFragment : Fragment() {
             .build()
         val service = retrofit.create(GoCaptureService::class.java)
         val call = service.captureImage(filePart)
-        call.enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                var input: InputStream? = null
+                try {
+                    input = response.body()?.byteStream()
+                    val file = File("board.sgf")
+                    val fos = FileOutputStream(file)
+                    fos.use { output ->
+                        val buffer = ByteArray(4 * 1024) // or other buffer size
+                        var read: Int?
+                        while (input?.read(buffer).also { read = it } != -1) {
+                            read?.let { output.write(buffer, 0, it) }
+                        }
+                        output.flush()
+                    }
+                    view?.let { Snackbar.make(it, "File saved", Snackbar.LENGTH_LONG) }?.show()
+                }catch (e:Exception){
+                    Log.e("saveFile",e.toString())
+                    view?.let { Snackbar.make(it, "Error", Snackbar.LENGTH_LONG) }?.show()
+                }
+                finally {
+                    input?.close()
+                }
                 Log.d("GoCapture", response.toString())
             }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.d("GoCapture", t.toString())
             }
         })

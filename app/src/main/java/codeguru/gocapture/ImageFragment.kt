@@ -68,6 +68,7 @@ class ImageFragment : Fragment() {
         val call = service.captureImage(filePart)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                requestWriteExternalFilePermissions()
                 var input: InputStream? = null
                 try {
                     input = response.body()?.byteStream()
@@ -101,5 +102,9 @@ class ImageFragment : Fragment() {
             output.flush()
         }
         view?.let { Snackbar.make(it, "File saved", Snackbar.LENGTH_LONG) }?.show()
+    }
+
+    private fun requestWriteExternalFilePermissions() {
+        TODO("Not yet implemented")
     }
 }

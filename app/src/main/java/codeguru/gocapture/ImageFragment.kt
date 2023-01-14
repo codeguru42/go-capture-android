@@ -2,6 +2,7 @@ package codeguru.gocapture
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -70,17 +71,7 @@ class ImageFragment : Fragment() {
                 var input: InputStream? = null
                 try {
                     input = response.body()?.byteStream()
-                    val file = File("board.sgf")
-                    val fos = FileOutputStream(file)
-                    fos.use { output ->
-                        val buffer = ByteArray(4 * 1024) // or other buffer size
-                        var read: Int?
-                        while (input?.read(buffer).also { read = it } != -1) {
-                            read?.let { output.write(buffer, 0, it) }
-                        }
-                        output.flush()
-                    }
-                    view?.let { Snackbar.make(it, "File saved", Snackbar.LENGTH_LONG) }?.show()
+                    input?.let { writeSgfFile(it) }
                 }catch (e:Exception){
                     Log.e("saveFile",e.toString())
                     view?.let { Snackbar.make(it, "Error", Snackbar.LENGTH_LONG) }?.show()
@@ -96,5 +87,19 @@ class ImageFragment : Fragment() {
             }
         })
         inputStream?.close()
+    }
+
+    private fun writeSgfFile(input: InputStream) {
+        val file = File(Environment.getExternalStorageDirectory(), "board.sgf")
+        val fos = FileOutputStream(file)
+        fos.use { output ->
+            val buffer = ByteArray(4 * 1024) // or other buffer size
+            var read: Int?
+            while (input.read(buffer).also { read = it } != -1) {
+                read?.let { output.write(buffer, 0, it) }
+            }
+            output.flush()
+        }
+        view?.let { Snackbar.make(it, "File saved", Snackbar.LENGTH_LONG) }?.show()
     }
 }

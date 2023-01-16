@@ -2,7 +2,6 @@ package codeguru.gocapture
 
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,18 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
+import okhttp3.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import java.io.File
-import java.io.FileOutputStream
+import java.io.FileNotFoundException
+import java.io.IOException
 import java.io.InputStream
+import java.io.StringWriter
 import java.util.concurrent.TimeUnit
 
 
@@ -68,16 +64,15 @@ class ImageFragment : Fragment() {
         val call = service.captureImage(filePart)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                requestWriteExternalFilePermissions()
                 var input: InputStream? = null
                 try {
                     input = response.body()?.byteStream()
                     input?.let { writeSgfFile(it) }
-                }catch (e:Exception){
-                    Log.e("saveFile",e.toString())
+                } catch (e:Exception){
+                    Log.e("saveFile", e.toString())
+                    Log.e("saveFile", e.stackTraceToString())
                     view?.let { Snackbar.make(it, "Error", Snackbar.LENGTH_LONG) }?.show()
-                }
-                finally {
+                } finally {
                     input?.close()
                 }
                 Log.d("GoCapture", response.toString())
@@ -91,20 +86,28 @@ class ImageFragment : Fragment() {
     }
 
     private fun writeSgfFile(input: InputStream) {
-        val file = File(Environment.getExternalStorageDirectory(), "board.sgf")
-        val fos = FileOutputStream(file)
-        fos.use { output ->
+        val output = StringWriter()
+        try {
             val buffer = ByteArray(4 * 1024) // or other buffer size
             var read: Int?
             while (input.read(buffer).also { read = it } != -1) {
-                read?.let { output.write(buffer, 0, it) }
+                read?.let { output.write(buffer.decodeToString()) }
             }
             output.flush()
+            Log.d("GoCapture", "SGF:")
+            Log.d("GoCapture", output.toString())
+            Log.d("GoCapture", "End SGF")
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            try {
+                output.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
         view?.let { Snackbar.make(it, "File saved", Snackbar.LENGTH_LONG) }?.show()
-    }
-
-    private fun requestWriteExternalFilePermissions() {
-        TODO("Not yet implemented")
     }
 }

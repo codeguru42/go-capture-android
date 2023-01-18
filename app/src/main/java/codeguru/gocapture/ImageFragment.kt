@@ -72,7 +72,8 @@ class ImageFragment : Fragment() {
                 var input: InputStream? = null
                 try {
                     input = response.body()?.byteStream()
-                    input?.let { writeSgfFile(it) }
+                    val contentType = response.headers().get("Content-Type")
+                    input?.let { writeSgfFile(it, contentType) }
                 }catch (e:Exception){
                     Log.e("saveFile",e.toString())
                     view?.let { Snackbar.make(it, "Error", Snackbar.LENGTH_LONG) }?.show()
@@ -90,11 +91,11 @@ class ImageFragment : Fragment() {
         inputStream?.close()
     }
 
-    private fun writeSgfFile(input: InputStream) {
+    private fun writeSgfFile(input: InputStream, contentType: String?) {
         val resolver: ContentResolver = requireContext().contentResolver
         val contentValues = ContentValues()
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "board.sgf")
-        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain")
+        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, contentType)
         contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
         val uri: Uri? = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
         if (uri != null) {

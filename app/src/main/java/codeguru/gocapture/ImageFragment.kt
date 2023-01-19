@@ -74,11 +74,10 @@ class ImageFragment : Fragment() {
                     input = response.body()?.byteStream()
                     val contentType = response.headers().get("Content-Type")
                     input?.let { writeSgfFile(it, contentType) }
-                }catch (e:Exception){
-                    Log.e("saveFile",e.toString())
+                } catch (e: Exception) {
+                    Log.e("saveFile", e.toString())
                     view?.let { Snackbar.make(it, "Error", Snackbar.LENGTH_LONG) }?.show()
-                }
-                finally {
+                } finally {
                     input?.close()
                 }
                 Log.d("GoCapture", response.toString())

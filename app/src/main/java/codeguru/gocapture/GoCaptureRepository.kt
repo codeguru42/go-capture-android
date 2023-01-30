@@ -54,7 +54,7 @@ class GoCaptureRepository(private val activity: Activity, private val view: View
                     input?.let { writeSgfFile(it, contentType) }
                 } catch (e: Exception) {
                     Log.e("saveFile", e.toString())
-                    view?.let { Snackbar.make(it, "Error", Snackbar.LENGTH_LONG) }?.show()
+                    Snackbar.make(view, "Error", Snackbar.LENGTH_LONG).show()
                 } finally {
                     input?.close()
                 }
@@ -100,6 +100,6 @@ class GoCaptureRepository(private val activity: Activity, private val view: View
             }
         }
 
-        view?.let { Snackbar.make(it, "File saved", Snackbar.LENGTH_LONG) }?.show()
+        Snackbar.make(view, "File saved", Snackbar.LENGTH_LONG).show()
     }
 }

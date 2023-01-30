@@ -21,19 +21,29 @@ class MainFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            Log.d(MainFragment::class.toString(), "get content result")
-            Log.d(MainFragment::class.toString(), uri.toString())
-            if (uri != null) {
-                val action = MainFragmentDirections.actionImage(uri.toString())
-                view.findNavController().navigate(action)
+        configureImageButton(view)
+        configureCameraButton(view)
+
+        return view
+    }
+
+    private fun configureImageButton(view: View) {
+        val getContent =
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+                Log.d(MainFragment::class.toString(), "get content result")
+                Log.d(MainFragment::class.toString(), uri.toString())
+                if (uri != null) {
+                    val action = MainFragmentDirections.actionImage(uri.toString())
+                    view.findNavController().navigate(action)
+                }
             }
-        }
         val imageButton: ImageButton = view.findViewById(R.id.image_button)
         imageButton.setOnClickListener {
             getContent.launch("image/*")
         }
+    }
 
+    private fun configureCameraButton(view: View) {
         val activity = requireActivity()
         val imagesDir = File(activity.filesDir, "images")
         if (!imagesDir.exists()) {
@@ -45,20 +55,19 @@ class MainFragment : Fragment() {
             BuildConfig.APPLICATION_ID + ".images.provider",
             file
         )
-        val takePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) { saved: Boolean ->
-            Log.d(MainFragment::class.toString(), "take picture result")
-            Log.d(MainFragment::class.toString(), saved.toString())
-            if (saved) {
-                val action = MainFragmentDirections.actionImage(imageUri.toString())
-                view.findNavController().navigate(action)
+        val takePicture =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { saved: Boolean ->
+                Log.d(MainFragment::class.toString(), "take picture result")
+                Log.d(MainFragment::class.toString(), saved.toString())
+                if (saved) {
+                    val action = MainFragmentDirections.actionImage(imageUri.toString())
+                    view.findNavController().navigate(action)
+                }
             }
-        }
 
         val cameraButton: ImageButton = view.findViewById(R.id.camera_button)
         cameraButton.setOnClickListener {
             takePicture.launch(imageUri)
         }
-
-        return view
     }
 }

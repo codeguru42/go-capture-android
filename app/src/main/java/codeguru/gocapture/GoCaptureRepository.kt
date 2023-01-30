@@ -25,6 +25,17 @@ import java.io.OutputStream
 import java.util.concurrent.TimeUnit
 
 class GoCaptureRepository(private val activity: Activity, private val view: View) {
+    private val okHttpClient = OkHttpClient.Builder()
+        .connectTimeout(20, TimeUnit.SECONDS)
+        .writeTimeout(20, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .build()
+
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .client(okHttpClient)
+        .baseUrl(BuildConfig.API_BASE_URL)
+        .build()
+
     fun processImage(imageUri: Uri) {
         val inputStream = activity.contentResolver.openInputStream(imageUri)
         val filePart = MultipartBody.Part.createFormData(
@@ -32,15 +43,6 @@ class GoCaptureRepository(private val activity: Activity, private val view: View
             imageUri.lastPathSegment,
             RequestBody.create(MediaType.parse("image/*"), inputStream?.readBytes())
         )
-        val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(20, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .build()
-        val retrofit = Retrofit.Builder()
-            .client(okHttpClient)
-            .baseUrl(BuildConfig.API_BASE_URL)
-            .build()
         val service = retrofit.create(GoCaptureService::class.java)
         val call = service.captureImage(filePart)
         call.enqueue(object : Callback<ResponseBody> {

@@ -63,7 +63,7 @@ class ImageFragment : Fragment() {
             .build()
         val retrofit = Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("http://192.168.1.2:8000/")
+            .baseUrl(BuildConfig.API_BASE_URL)
             .build()
         val service = retrofit.create(GoCaptureService::class.java)
         val call = service.captureImage(filePart)

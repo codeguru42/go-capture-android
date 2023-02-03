@@ -12,7 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class ImageFragment : Fragment() {
-    val args: ImageFragmentArgs by navArgs()
+    private val args: ImageFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

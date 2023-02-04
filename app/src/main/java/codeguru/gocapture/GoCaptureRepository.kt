@@ -55,7 +55,7 @@ class GoCaptureRepository(private val activity: Activity) {
                     Snackbar.make(processingView, "File Saved", Snackbar.LENGTH_LONG).show()
                 } catch (e: Exception) {
                     Log.e("saveFile", e.toString())
-                    Snackbar.make(processingView, "Error", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(processingView, "Error: ${e.message}", Snackbar.LENGTH_LONG).show()
                 } finally {
                     processingView.visibility = View.GONE
                     input?.close()

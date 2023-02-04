@@ -25,4 +25,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <include layout="@layout/view_processing"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,6 @@
     <string name="capture_image_button">Capture Image</string>
     <string name="load_image_button">Load Image</string>
     <string name="loaded_image">Loaded Image</string>
-    <string name="upload_image">Upload Image</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="processing">Processing your image</string>
+    <string name="upload_image">Upload Image</string>
 </resources>

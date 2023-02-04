@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -20,14 +21,17 @@ class ImageFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_image, container, false)
-        val repository = GoCaptureRepository(requireActivity(), view)
+        val repository = GoCaptureRepository(requireActivity())
         val imageView = view.findViewById<ImageView>(R.id.image_view)
         val imageUri = Uri.parse(args.imageUri)
         imageView.setImageURI(imageUri)
 
         val uploadButton = view.findViewById<FloatingActionButton>(R.id.upload_button)
+        val processingView = view.findViewById<ConstraintLayout>(R.id.processing_view)
+        processingView.visibility = View.GONE
         uploadButton.setOnClickListener {
-            repository.processImage(imageUri)
+            processingView.visibility = View.VISIBLE
+            repository.processImage(imageUri, processingView)
         }
 
         return view

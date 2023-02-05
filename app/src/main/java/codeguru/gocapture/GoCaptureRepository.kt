@@ -38,41 +38,44 @@ class GoCaptureRepository(private val activity: Activity) {
 
     fun processImage(imageUri: Uri, processingView: View) {
         val inputStream = activity.contentResolver.openInputStream(imageUri)
-        val filePart = MultipartBody.Part.createFormData(
-            "image",
-            imageUri.lastPathSegment,
-            RequestBody.create(MediaType.parse("image/*"), inputStream?.readBytes())
-        )
-        val service = retrofit.create(GoCaptureService::class.java)
-        val call = service.captureImage(filePart)
-        Log.d("GoCapture", "Uploading image...")
-        call.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                Log.d("GoCapture", "Response received")
-                var input: InputStream? = null
-                try {
-                    input = response.body()?.byteStream()
-                    val contentType = response.headers().get("Content-Type")
-                    Log.d("GoCapture", "Saving file...")
-                    input?.let { writeSgfFile(it, contentType) }
-                    Log.d("GoCapture", "File saved")
-                    Snackbar.make(processingView, "File Saved", Snackbar.LENGTH_LONG).show()
-                } catch (e: Exception) {
-                    Log.e("GoCapture", "Error: $e")
-                    Snackbar.make(processingView, "Error: ${e.message}", Snackbar.LENGTH_LONG).show()
-                } finally {
-                    processingView.visibility = View.GONE
-                    input?.close()
-                }
-                Log.d("GoCapture", response.toString())
-            }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                processingView.visibility = View.GONE
-                Log.d("GoCapture", t.toString())
-            }
-        })
-        inputStream?.close()
+        inputStream?.let {
+            val filePart = MultipartBody.Part.createFormData(
+                "image",
+                imageUri.lastPathSegment,
+                RequestBody.create(MediaType.parse("image/*"), inputStream.readBytes())
+            )
+            val service = retrofit.create(GoCaptureService::class.java)
+            val call = service.captureImage(filePart)
+            Log.d("GoCapture", "Uploading image...")
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    Log.d("GoCapture", "Response received")
+                    var input: InputStream? = null
+                    try {
+                        input = response.body()?.byteStream()
+                        val contentType = response.headers().get("Content-Type")
+                        Log.d("GoCapture", "Saving file...")
+                        input?.let { writeSgfFile(it, contentType) }
+                        Log.d("GoCapture", "File saved")
+                        Snackbar.make(processingView, "File Saved", Snackbar.LENGTH_LONG).show()
+                    } catch (e: Exception) {
+                        Log.e("GoCapture", "Error: $e")
+                        Snackbar.make(processingView, "Error: ${e.message}", Snackbar.LENGTH_LONG).show()
+                    } finally {
+                        processingView.visibility = View.GONE
+                        input?.close()
+                    }
+                    Log.d("GoCapture", response.toString())
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    processingView.visibility = View.GONE
+                    Log.d("GoCapture", t.toString())
+                }
+            })
+            inputStream.close()
+        }
     }
 
     private fun writeSgfFile(input: InputStream, contentType: String?) {

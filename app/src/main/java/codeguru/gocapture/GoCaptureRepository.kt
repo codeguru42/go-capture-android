@@ -3,9 +3,11 @@ package codeguru.gocapture
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
@@ -18,11 +20,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.concurrent.TimeUnit
+
 
 class GoCaptureRepository(private val activity: Activity) {
     private val okHttpClient = OkHttpClient.Builder()
@@ -54,9 +58,10 @@ class GoCaptureRepository(private val activity: Activity) {
                     var input: InputStream? = null
                     try {
                         input = response.body()?.byteStream()
+                        val filename = getFilename(imageUri)
                         val contentType = response.headers().get("Content-Type")
                         Log.d("GoCapture", "Saving file...")
-                        input?.let { writeSgfFile(it, contentType) }
+                        input?.let { writeSgfFile(it, filename, contentType) }
                         Log.d("GoCapture", "File saved")
                         Snackbar.make(processingView, "File Saved", Snackbar.LENGTH_LONG).show()
                     } catch (e: Exception) {
@@ -78,10 +83,23 @@ class GoCaptureRepository(private val activity: Activity) {
         }
     }
 
-    private fun writeSgfFile(input: InputStream, contentType: String?) {
+    private fun getFilename(imageUri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.ImageColumns.DISPLAY_NAME)
+        val cursor: Cursor? = activity.contentResolver.query(imageUri, projection, null, null, null)
+        cursor?.let {
+            val nameIndex: Int = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            cursor.moveToFirst()
+            val filename = cursor.getString(nameIndex)
+            cursor.close()
+            return File(filename).nameWithoutExtension
+        }
+        return null
+    }
+
+    private fun writeSgfFile(input: InputStream, filename: String?, contentType: String?) {
         val resolver: ContentResolver = activity.contentResolver
         val contentValues = ContentValues()
-        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "board.sgf")
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, contentType)
         contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
         val uri: Uri? = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)

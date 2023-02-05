@@ -45,16 +45,20 @@ class GoCaptureRepository(private val activity: Activity) {
         )
         val service = retrofit.create(GoCaptureService::class.java)
         val call = service.captureImage(filePart)
+        Log.d("GoCapture", "Uploading image...")
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Log.d("GoCapture", "Response received")
                 var input: InputStream? = null
                 try {
                     input = response.body()?.byteStream()
                     val contentType = response.headers().get("Content-Type")
+                    Log.d("GoCapture", "Saving file...")
                     input?.let { writeSgfFile(it, contentType) }
+                    Log.d("GoCapture", "File saved")
                     Snackbar.make(processingView, "File Saved", Snackbar.LENGTH_LONG).show()
                 } catch (e: Exception) {
-                    Log.e("saveFile", e.toString())
+                    Log.e("GoCapture", "Error: $e")
                     Snackbar.make(processingView, "Error: ${e.message}", Snackbar.LENGTH_LONG).show()
                 } finally {
                     processingView.visibility = View.GONE

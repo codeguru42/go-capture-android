@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import codeguru.gocapture.databinding.FragmentMainBinding
 import java.io.File
 
 
@@ -20,8 +21,8 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_main, container, false)
-
+        val binding = FragmentMainBinding.inflate(inflater)
+        val view = binding.root
         configureImageButton(view)
         configureCameraButton(view)
 

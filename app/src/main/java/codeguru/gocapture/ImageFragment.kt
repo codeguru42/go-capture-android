@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import codeguru.gocapture.databinding.FragmentImageBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -21,7 +22,8 @@ class ImageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_image, container, false)
+        val binding = FragmentImageBinding.inflate(inflater, container, false)
+        val view = binding.root
         val repository = GoCaptureRepository(requireActivity())
         val imageView = view.findViewById<ImageView>(R.id.image_view)
         val imageUri = Uri.parse(args.imageUri)

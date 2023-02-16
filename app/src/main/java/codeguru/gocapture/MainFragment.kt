@@ -23,29 +23,29 @@ class MainFragment : Fragment() {
     ): View {
         val binding = FragmentMainBinding.inflate(inflater)
         val view = binding.root
-        configureImageButton(view)
-        configureCameraButton(view)
+        configureImageButton(binding)
+        configureCameraButton(binding)
 
         return view
     }
 
-    private fun configureImageButton(view: View) {
+    private fun configureImageButton(binding: FragmentMainBinding) {
         val getContent =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
                 Log.d(MainFragment::class.toString(), "get content result")
                 Log.d(MainFragment::class.toString(), uri.toString())
                 if (uri != null) {
                     val action = MainFragmentDirections.actionImage(uri.toString())
-                    view.findNavController().navigate(action)
+                    binding.root.findNavController().navigate(action)
                 }
             }
-        val imageButton: ImageButton = view.findViewById(R.id.image_button)
+        val imageButton: ImageButton = binding.imageButton
         imageButton.setOnClickListener {
             getContent.launch("image/*")
         }
     }
 
-    private fun configureCameraButton(view: View) {
+    private fun configureCameraButton(binding: FragmentMainBinding) {
         val activity = requireActivity()
         val imagesDir = File(activity.filesDir, "images")
         if (!imagesDir.exists()) {
@@ -63,11 +63,11 @@ class MainFragment : Fragment() {
                 Log.d(MainFragment::class.toString(), saved.toString())
                 if (saved) {
                     val action = MainFragmentDirections.actionImage(imageUri.toString())
-                    view.findNavController().navigate(action)
+                    binding.root.findNavController().navigate(action)
                 }
             }
 
-        val cameraButton: ImageButton = view.findViewById(R.id.camera_button)
+        val cameraButton: ImageButton = binding.cameraButton
         cameraButton.setOnClickListener {
             takePicture.launch(imageUri)
         }

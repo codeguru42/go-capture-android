@@ -20,7 +20,7 @@ class ImageFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         val binding = FragmentImageBinding.inflate(inflater, container, false)
         val view = binding.root

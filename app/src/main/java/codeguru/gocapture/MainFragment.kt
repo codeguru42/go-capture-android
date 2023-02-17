@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -22,11 +21,9 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentMainBinding.inflate(inflater)
-        val view = binding.root
         configureImageButton(binding)
         configureCameraButton(binding)
-
-        return view
+        return binding.root
     }
 
     private fun configureImageButton(binding: FragmentMainBinding) {
@@ -39,8 +36,7 @@ class MainFragment : Fragment() {
                     binding.root.findNavController().navigate(action)
                 }
             }
-        val imageButton: ImageButton = binding.imageButton
-        imageButton.setOnClickListener {
+        binding.imageButton.setOnClickListener {
             getContent.launch("image/*")
         }
     }
@@ -51,7 +47,7 @@ class MainFragment : Fragment() {
         if (!imagesDir.exists()) {
             imagesDir.mkdir()
         }
-        val file = File(imagesDir,"go_capture.png")
+        val file = File(imagesDir, "go_capture.png")
         val imageUri = FileProvider.getUriForFile(
             activity,
             BuildConfig.APPLICATION_ID + ".images.provider",
@@ -67,8 +63,7 @@ class MainFragment : Fragment() {
                 }
             }
 
-        val cameraButton: ImageButton = binding.cameraButton
-        cameraButton.setOnClickListener {
+        binding.cameraButton.setOnClickListener {
             takePicture.launch(imageUri)
         }
     }

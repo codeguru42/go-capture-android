@@ -21,20 +21,17 @@ class ImageFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         val binding = FragmentImageBinding.inflate(inflater, container, false)
-        val view = binding.root
         val repository = GoCaptureRepository(requireActivity())
-        val imageView = binding.imageView
         val imageUri = Uri.parse(args.imageUri)
-        imageView.setImageURI(imageUri)
+        binding.imageView.setImageURI(imageUri)
 
-        val uploadButton = binding.uploadButton
-        val processingView = view.findViewById<ConstraintLayout>(R.id.processing_view)
+        val processingView = binding.root.findViewById<ConstraintLayout>(R.id.processing_view)
         processingView.visibility = View.GONE
-        uploadButton.setOnClickListener {
+        binding.uploadButton.setOnClickListener {
             processingView.visibility = View.VISIBLE
             repository.processImage(imageUri, processingView)
         }
 
-        return view
+        return binding.root
     }
 }

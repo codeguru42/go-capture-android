@@ -8,6 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import codeguru.gocapture.databinding.FragmentImageBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ImageFragment : Fragment() {
@@ -27,8 +31,15 @@ class ImageFragment : Fragment() {
         val processingView = binding.processing.processingView
         processingView.visibility = View.GONE
         binding.uploadButton.setOnClickListener {
-            processingView.visibility = View.VISIBLE
-            repository.processImage(imageUri, processingView)
+            CoroutineScope(Dispatchers.IO).launch {
+                withContext(Dispatchers.Main) {
+                    processingView.visibility = View.VISIBLE
+                }
+                repository.processImage(imageUri, processingView)
+                withContext(Dispatchers.Main) {
+                    processingView.visibility = View.GONE
+                }
+            }
         }
 
         return binding.root

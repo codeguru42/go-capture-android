@@ -37,35 +37,34 @@ class GoCaptureRepository(private val activity: Activity) {
         .build()
 
     suspend fun processImage(imageUri: Uri, processingView: View) {
-        val inputStream = activity.contentResolver.openInputStream(imageUri)
-
-        inputStream?.let {
+        val imageStream = activity.contentResolver.openInputStream(imageUri)
+        imageStream?.let {
             val filePart = MultipartBody.Part.createFormData(
                 "image",
                 imageUri.lastPathSegment,
-                RequestBody.create(MediaType.parse("image/*"), inputStream.readBytes())
+                RequestBody.create(MediaType.parse("image/*"), imageStream.readBytes())
             )
             val service = retrofit.create(GoCaptureService::class.java)
-            var input: InputStream? = null
+            var responseStream: InputStream? = null
             try {
                 Log.d("GoCapture", "Uploading image...")
                 val response = service.captureImage(filePart)
                 Log.d("GoCapture", "Response received")
                 Log.d("GoCapture", response.toString())
-                input = response.body()?.byteStream()
+                responseStream = response.body()?.byteStream()
                 val filename = getFilename(imageUri)
                 val contentType = response.headers().get("Content-Type")
                 Log.d("GoCapture", "Saving file...")
-                input?.let { writeSgfFile(it, filename, contentType) }
+                responseStream?.let { writeSgfFile(it, filename, contentType) }
                 Log.d("GoCapture", "File saved")
                 Snackbar.make(processingView, "File Saved", Snackbar.LENGTH_LONG).show()
             } catch (e: Exception) {
                 Log.e("GoCapture", "Error: $e")
                 Snackbar.make(processingView, "Error: ${e.message}", Snackbar.LENGTH_LONG).show()
             } finally {
-                input?.close()
+                responseStream?.close()
             }
-            inputStream.close()
+            imageStream.close()
         }
     }
 

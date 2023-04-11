@@ -5,4 +5,5 @@
     <string name="loaded_image">Loaded Image</string>
     <string name="processing">Processing your image</string>
     <string name="upload_image">Upload Image</string>
+    <string name="fcm_token_key">FCM_TOKEN</string>
 </resources>

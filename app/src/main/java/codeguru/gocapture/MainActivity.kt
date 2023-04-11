@@ -1,5 +1,6 @@
 package codeguru.gocapture
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -21,9 +22,13 @@ class MainActivity : AppCompatActivity() {
 
             // Get new FCM registration token
             val token = task.result
-
-            // Log and toast
             Log.d(TAG, token)
+
+            val sharedPref = getPreferences(Context.MODE_PRIVATE)
+            with (sharedPref.edit()) {
+                putString(getString(R.string.fcm_token_key), null)
+                apply()
+            }
         })
     }
 }

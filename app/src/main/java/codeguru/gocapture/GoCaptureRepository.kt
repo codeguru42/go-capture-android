@@ -3,6 +3,7 @@ package codeguru.gocapture
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
@@ -45,24 +46,24 @@ class GoCaptureRepository(private val activity: Activity) {
                 RequestBody.create(MediaType.parse("image/*"), imageStream.readBytes())
             )
             val service = retrofit.create(GoCaptureService::class.java)
-            var responseStream: InputStream? = null
             try {
                 Log.d("GoCapture", "Uploading image...")
-                val response = service.captureImage(filePart)
+                val preferences = activity.getPreferences(Context.MODE_PRIVATE)
+                val fcmRegistrationToken = preferences.getString(
+                    activity.getString(R.string.fcm_token_key),
+                    null
+                )
+                Log.d("GoCapture", "token: $fcmRegistrationToken")
+                val response = fcmRegistrationToken?.let {
+                    val fcmTokenPart = RequestBody.create(MediaType.parse("text/plain"), it)
+                    service.captureImageAsync(filePart, fcmTokenPart)
+                }
+
                 Log.d("GoCapture", "Response received")
-                Log.d("GoCapture", response.toString())
-                responseStream = response.body()?.byteStream()
-                val filename = getFilename(imageUri)
-                val contentType = response.headers().get("Content-Type")
-                Log.d("GoCapture", "Saving file...")
-                responseStream?.let { writeSgfFile(it, filename, contentType) }
-                Log.d("GoCapture", "File saved")
-                Snackbar.make(processingView, "File Saved", Snackbar.LENGTH_LONG).show()
+                Log.d("GoCapture", "response: $response")
             } catch (e: Exception) {
                 Log.e("GoCapture", "Error: $e")
                 Snackbar.make(processingView, "Error: ${e.message}", Snackbar.LENGTH_LONG).show()
-            } finally {
-                responseStream?.close()
             }
             imageStream.close()
         }

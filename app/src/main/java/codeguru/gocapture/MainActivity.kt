@@ -22,11 +22,11 @@ class MainActivity : AppCompatActivity() {
 
             // Get new FCM registration token
             val token = task.result
-            Log.d(TAG, token)
+            Log.d(TAG, "token: $token")
 
             val sharedPref = getPreferences(Context.MODE_PRIVATE)
             with (sharedPref.edit()) {
-                putString(getString(R.string.fcm_token_key), null)
+                putString(getString(R.string.fcm_token_key), token)
                 apply()
             }
         })

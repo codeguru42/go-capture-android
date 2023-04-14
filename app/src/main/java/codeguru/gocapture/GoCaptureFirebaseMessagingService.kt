@@ -10,7 +10,6 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.io.InputStream
 import java.io.OutputStream
 
 class GoCaptureFirebaseMessagingService : FirebaseMessagingService() {
@@ -32,7 +31,9 @@ class GoCaptureFirebaseMessagingService : FirebaseMessagingService() {
         // Check if message contains a data payload.
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-
+            val sgfData: String? = remoteMessage.data["sgf"]
+            writeSgfFile(sgfData, "board.sgf", "application/x-go-sgf sgf")
+            Log.d(TAG, "SGF file written")
         }
 
         // Check if message contains a notification payload.
@@ -44,7 +45,7 @@ class GoCaptureFirebaseMessagingService : FirebaseMessagingService() {
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private fun writeSgfFile(input: InputStream, filename: String?, contentType: String?) {
+    private fun writeSgfFile(input: String?, filename: String?, contentType: String?) {
         val resolver: ContentResolver = this.contentResolver
         val contentValues = ContentValues()
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
@@ -55,12 +56,7 @@ class GoCaptureFirebaseMessagingService : FirebaseMessagingService() {
             var output: OutputStream? = null
             try {
                 output = resolver.openOutputStream(uri)
-                val buffer = ByteArray(4 * 1024) // or other buffer size
-                var read: Int?
-                while (input.read(buffer).also { read = it } != -1) {
-                    read?.let { output?.write(buffer, 0, it) }
-                }
-                output?.flush()
+                output?.write(input?.toByteArray())
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
             } catch (e: IOException) {

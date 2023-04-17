@@ -45,7 +45,7 @@ class GoCaptureFirebaseMessagingService : FirebaseMessagingService() {
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private fun writeSgfFile(input: String?, filename: String?, contentType: String?) {
+    private fun writeSgfFile(input: String?, filename: String, contentType: String) {
         val resolver: ContentResolver = this.contentResolver
         val contentValues = ContentValues()
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, filename)

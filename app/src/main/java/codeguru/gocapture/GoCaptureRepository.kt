@@ -31,11 +31,12 @@ class GoCaptureRepository(private val activity: Activity) {
         .build()
 
     suspend fun processImage(imageUri: Uri, processingView: View) {
+        val fileName = getFilename(imageUri)
         val imageStream = activity.contentResolver.openInputStream(imageUri)
         imageStream?.let {
             val filePart = MultipartBody.Part.createFormData(
                 "image",
-                imageUri.lastPathSegment,
+                fileName,
                 RequestBody.create(MediaType.parse("image/*"), imageStream.readBytes())
             )
             val service = retrofit.create(GoCaptureService::class.java)

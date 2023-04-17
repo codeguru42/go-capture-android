@@ -71,7 +71,7 @@ class GoCaptureRepository(private val activity: Activity) {
             cursor.moveToFirst()
             val filename = cursor.getString(nameIndex)
             cursor.close()
-            return File(filename).nameWithoutExtension
+            return File(filename).name
         }
         return null
     }

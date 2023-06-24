@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.OutputStream
@@ -32,7 +33,9 @@ class GoCaptureFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
             val sgfData: String? = remoteMessage.data["sgf"]
-            writeSgfFile(sgfData, "board.sgf", "application/x-go-sgf sgf")
+            val imageFilename: String = remoteMessage.data["image_filename"]!!
+            val sgfFilename: String = File(imageFilename).nameWithoutExtension + ".sgf"
+            writeSgfFile(sgfData, sgfFilename, "application/x-go-sgf sgf")
             Log.d(TAG, "SGF file written")
         }
 

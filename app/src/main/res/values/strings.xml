@@ -6,4 +6,6 @@
     <string name="processing">Processing your image</string>
     <string name="upload_image">Upload Image</string>
     <string name="fcm_token_key">FCM_TOKEN</string>
+    <string name="channel_name">Go Capture</string>
+    <string name="channel_description">Notifications for the Go Capture app</string>
 </resources>

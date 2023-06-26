@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.io.File
@@ -15,6 +17,8 @@ import java.io.OutputStream
 
 class GoCaptureFirebaseMessagingService : FirebaseMessagingService() {
     private val TAG: String = javaClass.name
+    private val CHANNEL_ID: String = "Go Capture"
+    private var nextNotificationId: Int = 1
 
     override fun onCreate() {
         super.onCreate()
@@ -37,15 +41,13 @@ class GoCaptureFirebaseMessagingService : FirebaseMessagingService() {
             val sgfFilename: String = File(imageFilename).nameWithoutExtension + ".sgf"
             writeSgfFile(sgfData, sgfFilename, "application/x-go-sgf sgf")
             Log.d(TAG, "SGF file written")
+            sendNotification(imageFilename)
         }
 
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
         }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
 
     private fun writeSgfFile(input: String?, filename: String, contentType: String) {
@@ -73,6 +75,20 @@ class GoCaptureFirebaseMessagingService : FirebaseMessagingService() {
                     }
                 }
             }
+        }
+    }
+
+    private fun sendNotification(imageFilename: String) {
+        val notificationTitle = getString(R.string.notification_title)
+        val notificationContext = getString(R.string.notification_content)
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(notificationTitle)
+            .setContentText(notificationContext)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(nextNotificationId++, builder.build())
         }
     }
 }

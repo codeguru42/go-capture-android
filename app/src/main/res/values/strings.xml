@@ -6,4 +6,8 @@
     <string name="processing">Processing your image</string>
     <string name="upload_image">Upload Image</string>
     <string name="fcm_token_key">FCM_TOKEN</string>
+    <string name="channel_name">Go Capture</string>
+    <string name="channel_description">Notifications for the Go Capture app</string>
+    <string name="notification_title">SGF file ready</string>
+    <string name="notification_content">Your SGF file is here. You can find it in the Downloads folder on your device.</string>
 </resources>

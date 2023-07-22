@@ -6,21 +6,21 @@ plugins {
 }
 
 android {
-    namespace('codeguru.gocapture')
-    compileSdk(33)
+    namespace = "codeguru.gocapture"
+    compileSdk = 33
 
     defaultConfig {
-        applicationId("codeguru.gocapture")
-        minSdk(21)
-        targetSdk(33)
-        versionCode(3)
-        versionName("1.0-alpha2")
-        testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
+        applicationId = 'codeguru.gocapture'
+        minSdk = 21
+        targetSdk = 33
+        versionCode = 3
+        versionName = "1.0-alpha2"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled(false)
+            minifyEnabled = false
             proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
             buildConfigField('String', 'API_BASE_URL', '"https://go-capture-api.code-apprentice.com"')
         }
@@ -29,14 +29,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_1_8)
-        targetCompatibility(JavaVersion.VERSION_1_8)
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        viewBinding(true)
+        viewBinding = true
     }
 }
 

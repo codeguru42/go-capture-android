@@ -32,10 +32,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.0"
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        compose = true
         viewBinding = true
     }
 }

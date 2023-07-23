@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -28,11 +30,19 @@ class MainFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                Button(onClick = { }) {
-                    Icon(
-                        Icons.Filled.PhotoCamera,
-                        contentDescription = stringResource(id = R.string.capture_image_button)
-                    )
+                Column {
+                    Button(onClick = { }) {
+                        Icon(
+                            Icons.Filled.PhotoCamera,
+                            contentDescription = stringResource(id = R.string.capture_image_button)
+                        )
+                    }
+                    Button(onClick = { }) {
+                        Icon(
+                            Icons.Filled.Image,
+                            contentDescription = stringResource(id = R.string.load_image_button)
+                        )
+                    }
                 }
             }
         }

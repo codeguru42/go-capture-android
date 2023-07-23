@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.Text
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -20,10 +22,11 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentMainBinding.inflate(inflater)
-        configureImageButton(binding)
-        configureCameraButton(binding)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                Text(text = "Hello world.")
+            }
+        }
     }
 
     private fun configureImageButton(binding: FragmentMainBinding) {

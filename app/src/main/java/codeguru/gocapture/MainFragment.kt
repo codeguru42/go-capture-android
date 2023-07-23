@@ -19,6 +19,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import codeguru.gocapture.databinding.FragmentMainBinding
+import codeguru.gocapture.ui.theme.GoCaptureTheme
 import java.io.File
 
 
@@ -30,18 +31,20 @@ class MainFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                Column {
-                    Button(onClick = { }) {
-                        Icon(
-                            Icons.Filled.PhotoCamera,
-                            contentDescription = stringResource(id = R.string.capture_image_button)
-                        )
-                    }
-                    Button(onClick = { }) {
-                        Icon(
-                            Icons.Filled.Image,
-                            contentDescription = stringResource(id = R.string.load_image_button)
-                        )
+                GoCaptureTheme {
+                    Column {
+                        Button(onClick = { }) {
+                            Icon(
+                                Icons.Filled.PhotoCamera,
+                                contentDescription = stringResource(id = R.string.capture_image_button)
+                            )
+                        }
+                        Button(onClick = { }) {
+                            Icon(
+                                Icons.Filled.Image,
+                                contentDescription = stringResource(id = R.string.load_image_button)
+                            )
+                        }
                     }
                 }
             }

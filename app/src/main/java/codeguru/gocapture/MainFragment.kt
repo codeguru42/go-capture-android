@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.FileProvider
@@ -24,7 +25,9 @@ class MainFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                Text(text = "Hello world.")
+                Button(onClick = { }) {
+                    Text(text = "Click me!")
+                }
             }
         }
     }

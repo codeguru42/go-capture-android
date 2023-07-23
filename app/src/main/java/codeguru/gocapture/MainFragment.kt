@@ -7,9 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -26,7 +29,10 @@ class MainFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 Button(onClick = { }) {
-                    Text(text = "Click me!")
+                    Icon(
+                        Icons.Filled.PhotoCamera,
+                        contentDescription = stringResource(id = R.string.capture_image_button)
+                    )
                 }
             }
         }

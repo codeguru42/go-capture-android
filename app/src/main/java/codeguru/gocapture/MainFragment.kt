@@ -94,18 +94,28 @@ fun App(modifier: Modifier) {
         color = MaterialTheme.colorScheme.background
     ) {
         Column {
-            Button(onClick = { }) {
-                Icon(
-                    Icons.Filled.PhotoCamera,
-                    contentDescription = stringResource(id = R.string.capture_image_button)
-                )
-            }
-            Button(onClick = { }) {
-                Icon(
-                    Icons.Filled.Image,
-                    contentDescription = stringResource(id = R.string.load_image_button)
-                )
-            }
+            CameraButton()
+            ImageButton()
         }
+    }
+}
+
+@Composable
+private fun ImageButton() {
+    Button(onClick = { }) {
+        Icon(
+            Icons.Filled.Image,
+            contentDescription = stringResource(id = R.string.load_image_button)
+        )
+    }
+}
+
+@Composable
+private fun CameraButton() {
+    Button(onClick = { }) {
+        Icon(
+            Icons.Filled.PhotoCamera,
+            contentDescription = stringResource(id = R.string.capture_image_button)
+        )
     }
 }

@@ -16,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
@@ -36,25 +37,7 @@ class MainFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 GoCaptureTheme {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        Column {
-                            Button(onClick = { }) {
-                                Icon(
-                                    Icons.Filled.PhotoCamera,
-                                    contentDescription = stringResource(id = R.string.capture_image_button)
-                                )
-                            }
-                            Button(onClick = { }) {
-                                Icon(
-                                    Icons.Filled.Image,
-                                    contentDescription = stringResource(id = R.string.load_image_button)
-                                )
-                            }
-                        }
-                    }
+                    App(modifier = Modifier.fillMaxSize())
                 }
             }
         }
@@ -99,6 +82,30 @@ class MainFragment : Fragment() {
 
         binding.cameraButton.setOnClickListener {
             takePicture.launch(imageUri)
+        }
+    }
+
+}
+
+@Composable
+fun App(modifier: Modifier) {
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Column {
+            Button(onClick = { }) {
+                Icon(
+                    Icons.Filled.PhotoCamera,
+                    contentDescription = stringResource(id = R.string.capture_image_button)
+                )
+            }
+            Button(onClick = { }) {
+                Icon(
+                    Icons.Filled.Image,
+                    contentDescription = stringResource(id = R.string.load_image_button)
+                )
+            }
         }
     }
 }

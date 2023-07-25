@@ -25,8 +25,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import codeguru.gocapture.databinding.FragmentMainBinding
 import codeguru.gocapture.ui.theme.GoCaptureTheme
 import java.io.File
 

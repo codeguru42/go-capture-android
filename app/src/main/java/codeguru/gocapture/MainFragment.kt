@@ -1,11 +1,11 @@
 package codeguru.gocapture
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,21 +41,6 @@ class MainFragment : Fragment() {
                     App(modifier = Modifier.fillMaxSize())
                 }
             }
-        }
-    }
-
-    private fun configureImageButton(binding: FragmentMainBinding) {
-        val getContent =
-            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                Log.d(MainFragment::class.toString(), "get content result")
-                Log.d(MainFragment::class.toString(), uri.toString())
-                if (uri != null) {
-                    val action = MainFragmentDirections.actionImage(uri.toString())
-                    binding.root.findNavController().navigate(action)
-                }
-            }
-        binding.imageButton.setOnClickListener {
-            getContent.launch("image/*")
         }
     }
 
@@ -105,7 +90,15 @@ fun App(modifier: Modifier) {
 
 @Composable
 private fun ImageButton() {
-    Button(onClick = { }) {
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = {
+            Log.d(MainFragment::class.toString(), "get content result")
+            Log.d(MainFragment::class.toString(), it.toString())
+        }
+    )
+
+    Button(onClick = { launcher.launch("image/*") }) {
         Icon(
             Icons.Filled.Image,
             contentDescription = stringResource(id = R.string.load_image_button)

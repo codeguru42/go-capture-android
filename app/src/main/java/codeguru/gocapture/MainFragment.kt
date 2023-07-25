@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Image
@@ -55,8 +56,11 @@ fun App(modifier: Modifier) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.weight(1.0f))
             CameraButton()
+            Spacer(modifier = Modifier.weight(1.0f))
             ImageButton()
+            Spacer(modifier = Modifier.weight(1.0f))
         }
     }
 }

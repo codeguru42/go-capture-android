@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -43,34 +44,6 @@ class MainFragment : Fragment() {
             }
         }
     }
-
-    private fun configureCameraButton(binding: FragmentMainBinding) {
-        val activity = requireActivity()
-        val imagesDir = File(activity.filesDir, "images")
-        if (!imagesDir.exists()) {
-            imagesDir.mkdir()
-        }
-        val file = File(imagesDir, "go_capture.png")
-        val imageUri = FileProvider.getUriForFile(
-            activity,
-            BuildConfig.APPLICATION_ID + ".images.provider",
-            file
-        )
-        val takePicture =
-            registerForActivityResult(ActivityResultContracts.TakePicture()) { saved: Boolean ->
-                Log.d(MainFragment::class.toString(), "take picture result")
-                Log.d(MainFragment::class.toString(), saved.toString())
-                if (saved) {
-                    val action = MainFragmentDirections.actionImage(imageUri.toString())
-                    binding.root.findNavController().navigate(action)
-                }
-            }
-
-        binding.cameraButton.setOnClickListener {
-            takePicture.launch(imageUri)
-        }
-    }
-
 }
 
 @Composable
@@ -108,7 +81,25 @@ private fun ImageButton() {
 
 @Composable
 private fun CameraButton() {
-    Button(onClick = { }) {
+    val imagesDir = File(LocalContext.current.filesDir, "images")
+    if (!imagesDir.exists()) {
+        imagesDir.mkdir()
+    }
+    val file = File(imagesDir, "go_capture.png")
+    val imageUri = FileProvider.getUriForFile(
+        LocalContext.current,
+        BuildConfig.APPLICATION_ID + ".images.provider",
+        file
+    )
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture(),
+        onResult = {
+            Log.d(MainFragment::class.toString(), "take picture result")
+            Log.d(MainFragment::class.toString(), it.toString())
+        }
+    )
+
+    Button(onClick = { launcher.launch(imageUri) }) {
         Icon(
             Icons.Filled.PhotoCamera,
             contentDescription = stringResource(id = R.string.capture_image_button)

@@ -25,6 +25,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import codeguru.gocapture.ui.theme.GoCaptureTheme
 import java.io.File
 
@@ -47,6 +49,8 @@ class MainFragment : Fragment() {
 
 @Composable
 fun App(modifier: Modifier) {
+    val navController = rememberNavController()
+
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
@@ -55,21 +59,25 @@ fun App(modifier: Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.weight(1.0f))
-            CameraButton()
+            CameraButton(navController)
             Spacer(modifier = Modifier.weight(1.0f))
-            ImageButton()
+            ImageButton(navController)
             Spacer(modifier = Modifier.weight(1.0f))
         }
     }
 }
 
 @Composable
-private fun ImageButton() {
+private fun ImageButton(navController: NavController) {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {
             Log.d(MainFragment::class.toString(), "get content result")
             Log.d(MainFragment::class.toString(), it.toString())
+            if (it != null) {
+                val action = MainFragmentDirections.actionImage(it.toString())
+                navController.navigate(action)
+            }
         }
     )
 
@@ -82,7 +90,7 @@ private fun ImageButton() {
 }
 
 @Composable
-private fun CameraButton() {
+private fun CameraButton(navController: NavController) {
     val imagesDir = File(LocalContext.current.filesDir, "images")
     if (!imagesDir.exists()) {
         imagesDir.mkdir()
@@ -98,6 +106,10 @@ private fun CameraButton() {
         onResult = {
             Log.d(MainFragment::class.toString(), "take picture result")
             Log.d(MainFragment::class.toString(), it.toString())
+            if (it) {
+                val action = MainFragmentDirections.actionImage(imageUri.toString())
+                navController.navigate(action)
+            }
         }
     )
 

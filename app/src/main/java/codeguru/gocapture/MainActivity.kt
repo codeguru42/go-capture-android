@@ -108,8 +108,8 @@ private fun ImageButton(navController: NavController) {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {
-            Log.d(MainFragment::class.toString(), "get content result")
-            Log.d(MainFragment::class.toString(), it.toString())
+            Log.d(MainActivity::class.toString(), "get content result")
+            Log.d(MainActivity::class.toString(), it.toString())
             if (it != null) {
                 val action = MainFragmentDirections.actionImage(it.toString())
                 navController.navigate(action)
@@ -140,8 +140,8 @@ private fun CameraButton(navController: NavController) {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
         onResult = {
-            Log.d(MainFragment::class.toString(), "take picture result")
-            Log.d(MainFragment::class.toString(), it.toString())
+            Log.d(MainActivity::class.toString(), "take picture result")
+            Log.d(MainActivity::class.toString(), it.toString())
             if (it) {
                 val action = MainFragmentDirections.actionImage(imageUri.toString())
                 navController.navigate(action)

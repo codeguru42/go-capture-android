@@ -19,13 +19,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import codeguru.gocapture.BuildConfig
 import codeguru.gocapture.MainActivity
 import codeguru.gocapture.R
 import java.io.File
 
 @Composable
-fun MainScreen(navController: NavController, modifier: Modifier) {
+fun MainScreen(navController: NavHostController, modifier: Modifier) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background
@@ -43,15 +44,14 @@ fun MainScreen(navController: NavController, modifier: Modifier) {
 }
 
 @Composable
-private fun ImageButton(navController: NavController) {
+private fun ImageButton(navController: NavHostController) {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {
             Log.d(MainActivity::class.toString(), "get content result")
             Log.d(MainActivity::class.toString(), it.toString())
             if (it != null) {
-//                val action = MainFragmentDirections.actionImage(it.toString())
-//                navController.navigate(action)
+                navController.navigate("image")
             }
         }
     )

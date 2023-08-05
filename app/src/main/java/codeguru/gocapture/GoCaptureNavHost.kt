@@ -16,5 +16,7 @@ fun GoCaptureNavHost(navController: NavHostController, modifier: Modifier) {
         composable(route = Main.route) {
             MainScreen(navController = navController, modifier = modifier)
         }
+        composable(route = Image.route) {
+        }
     }
 }

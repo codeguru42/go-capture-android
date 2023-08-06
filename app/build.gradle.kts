@@ -63,6 +63,7 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.compose.ui:ui-tooling")

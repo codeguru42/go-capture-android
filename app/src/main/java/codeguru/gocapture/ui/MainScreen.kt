@@ -24,6 +24,8 @@ import codeguru.gocapture.BuildConfig
 import codeguru.gocapture.MainActivity
 import codeguru.gocapture.R
 import java.io.File
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun MainScreen(navController: NavHostController, modifier: Modifier) {
@@ -51,7 +53,8 @@ private fun ImageButton(navController: NavHostController) {
             Log.d(MainActivity::class.toString(), "get content result")
             Log.d(MainActivity::class.toString(), it.toString())
             if (it != null) {
-                navController.navigate("image")
+                val encodedImageUrl = URLEncoder.encode(it.toString(), StandardCharsets.UTF_8)
+                navController.navigate("image/${encodedImageUrl}", )
             }
         }
     )

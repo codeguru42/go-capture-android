@@ -85,8 +85,8 @@ private fun CameraButton(navController: NavController) {
             Log.d(MainActivity::class.toString(), "take picture result")
             Log.d(MainActivity::class.toString(), it.toString())
             if (it) {
-//                val action = MainFragmentDirections.actionImage(imageUri.toString())
-//                navController.navigate(action)
+                val encodedImageUrl = URLEncoder.encode(imageUri.toString(), StandardCharsets.UTF_8)
+                navController.navigate("image/${encodedImageUrl}", )
             }
         }
     )

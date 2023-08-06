@@ -9,5 +9,5 @@ object Main : Destination {
 }
 
 object Image : Destination {
-    override val route = "image"
+    override val route = "image/{imageUri}"
 }

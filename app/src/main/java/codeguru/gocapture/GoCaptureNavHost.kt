@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import codeguru.gocapture.ui.ImageScreen
 import codeguru.gocapture.ui.MainScreen
 
 @Composable
@@ -16,7 +17,14 @@ fun GoCaptureNavHost(navController: NavHostController, modifier: Modifier) {
         composable(route = Main.route) {
             MainScreen(navController = navController, modifier = modifier)
         }
-        composable(route = Image.route) {
+        composable(
+            route = Image.route,
+        ) {
+            ImageScreen(
+                navController = navController,
+                modifier = modifier,
+                imageUri = it.arguments?.getString("imageUri")
+            )
         }
     }
 }

@@ -7,9 +7,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
-import android.view.View
-import com.google.android.material.snackbar.Snackbar
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -30,14 +28,14 @@ class GoCaptureRepository(private val activity: Activity) {
         .baseUrl(BuildConfig.API_BASE_URL)
         .build()
 
-    suspend fun processImage(imageUri: Uri, processingView: View) {
+    suspend fun processImage(imageUri: Uri, setErrorMessage: (String?) -> Unit) {
         val fileName = getFilename(imageUri)
         val imageStream = activity.contentResolver.openInputStream(imageUri)
         imageStream?.let {
             val filePart = MultipartBody.Part.createFormData(
                 "image",
                 fileName,
-                RequestBody.create(MediaType.parse("image/*"), imageStream.readBytes())
+                RequestBody.create("image/*".toMediaType(), imageStream.readBytes())
             )
             val service = retrofit.create(GoCaptureService::class.java)
             try {
@@ -49,7 +47,7 @@ class GoCaptureRepository(private val activity: Activity) {
                 )
                 Log.d("GoCapture", "token: $fcmRegistrationToken")
                 val response = fcmRegistrationToken?.let {
-                    val fcmTokenPart = RequestBody.create(MediaType.parse("text/plain"), it)
+                    val fcmTokenPart = RequestBody.create("text/plain".toMediaType(), it)
                     service.captureImageAsync(filePart, fcmTokenPart)
                 }
 
@@ -57,7 +55,7 @@ class GoCaptureRepository(private val activity: Activity) {
                 Log.d("GoCapture", "response: $response")
             } catch (e: Exception) {
                 Log.e("GoCapture", "Error: $e")
-                Snackbar.make(processingView, "Error: ${e.message}", Snackbar.LENGTH_LONG).show()
+                setErrorMessage(e.message)
             }
             imageStream.close()
         }

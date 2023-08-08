@@ -12,9 +12,13 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,10 +36,14 @@ import kotlinx.coroutines.launch
 fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: String?) {
     val repository = GoCaptureRepository(LocalContext.current as Activity)
     val (isProcessing, setIsProcessing) = remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val (errorMessage, setErrorMessage) = remember<MutableState<String?>> { mutableStateOf("") }
 
     Scaffold(
         modifier = modifier,
-        floatingActionButton = { UploadButton(setIsProcessing, repository, imageUri) }
+        floatingActionButton = { UploadButton(repository, imageUri, setIsProcessing, setErrorMessage) },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { contentPadding ->
         Box(modifier = Modifier.padding(contentPadding)) {
             AsyncImage(
@@ -47,13 +55,20 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
             }
         }
     }
+
+    if (!errorMessage.isNullOrEmpty()) {
+        scope.launch {
+            snackbarHostState.showSnackbar(errorMessage)
+        }
+    }
 }
 
 @Composable
 private fun UploadButton(
-    setIsProcessing: (Boolean) -> Unit,
     repository: GoCaptureRepository,
-    imageUri: String?
+    imageUri: String?,
+    setIsProcessing: (Boolean) -> Unit,
+    setErrorMessage: (String?) -> Unit,
 ) {
     val activity = LocalContext.current as MainActivity
     FloatingActionButton(
@@ -61,7 +76,7 @@ private fun UploadButton(
             activity.requestNotificationPermission()
             setIsProcessing(true)
             CoroutineScope(Dispatchers.IO).launch {
-                repository.processImage(Uri.parse(imageUri))
+                repository.processImage(Uri.parse(imageUri), setErrorMessage)
                 setIsProcessing(false)
             }
         }

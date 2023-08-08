@@ -28,7 +28,7 @@ class GoCaptureRepository(private val activity: Activity) {
         .baseUrl(BuildConfig.API_BASE_URL)
         .build()
 
-    suspend fun processImage(imageUri: Uri) {
+    suspend fun processImage(imageUri: Uri, setErrorMessage: (String?) -> Unit) {
         val fileName = getFilename(imageUri)
         val imageStream = activity.contentResolver.openInputStream(imageUri)
         imageStream?.let {
@@ -55,6 +55,7 @@ class GoCaptureRepository(private val activity: Activity) {
                 Log.d("GoCapture", "response: $response")
             } catch (e: Exception) {
                 Log.e("GoCapture", "Error: $e")
+                setErrorMessage(e.message)
             }
             imageStream.close()
         }

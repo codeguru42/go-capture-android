@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.PhotoCamera
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -62,7 +64,8 @@ private fun ImageButton(navController: NavHostController) {
     Button(onClick = { launcher.launch("image/*") }) {
         Icon(
             Icons.Filled.Image,
-            contentDescription = stringResource(id = R.string.load_image_button)
+            contentDescription = stringResource(id = R.string.load_image_button),
+            modifier = Modifier.size(96.dp)
         )
     }
 }
@@ -94,7 +97,8 @@ private fun CameraButton(navController: NavController) {
     Button(onClick = { launcher.launch(imageUri) }) {
         Icon(
             Icons.Filled.PhotoCamera,
-            contentDescription = stringResource(id = R.string.capture_image_button)
+            contentDescription = stringResource(id = R.string.capture_image_button),
+            modifier = Modifier.size(96.dp)
         )
     }
 }

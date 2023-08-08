@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -38,6 +39,7 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
                     isProcessing = true
                     CoroutineScope(Dispatchers.IO).launch {
                         repository.processImage(Uri.parse(imageUri))
+                        isProcessing = false
                     }
                 }
             ) {
@@ -53,6 +55,9 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
                 model = imageUri,
                 contentDescription = stringResource(id = R.string.loaded_image)
             )
+        }
+        if (isProcessing) {
+            CircularProgressIndicator()
         }
     }
 }

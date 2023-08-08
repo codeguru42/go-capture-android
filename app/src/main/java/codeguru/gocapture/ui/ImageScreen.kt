@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,7 +38,6 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
     val repository = GoCaptureRepository(LocalContext.current as Activity)
     val (isProcessing, setIsProcessing) = remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val (errorMessage, setErrorMessage) = remember<MutableState<String?>> { mutableStateOf("") }
 
     Scaffold(
@@ -57,7 +57,7 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
     }
 
     if (!errorMessage.isNullOrEmpty()) {
-        scope.launch {
+        LaunchedEffect(snackbarHostState) {
             snackbarHostState.showSnackbar(errorMessage)
         }
     }

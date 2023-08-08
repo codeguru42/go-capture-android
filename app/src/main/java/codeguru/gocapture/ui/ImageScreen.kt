@@ -4,6 +4,7 @@ import android.app.Activity
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -14,6 +15,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -39,13 +42,18 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
     val (isProcessing, setIsProcessing) = remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     val (errorMessage, setErrorMessage) = remember<MutableState<String?>> { mutableStateOf("") }
+    val (blackToPlay, setBlackToPlay) = remember { mutableStateOf(true) }
 
     Scaffold(
         modifier = modifier,
         floatingActionButton = { UploadButton(repository, imageUri, setIsProcessing, setErrorMessage) },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { contentPadding ->
-        Box(modifier = Modifier.padding(contentPadding)) {
+        Column(modifier = Modifier.padding(contentPadding)) {
+            Row {
+                Switch(checked = blackToPlay, onCheckedChange = setBlackToPlay)
+                Text(if (blackToPlay) stringResource(R.string.black_to_play) else stringResource(R.string.white_to_play))
+            }
             AsyncImage(
                 model = imageUri,
                 contentDescription = stringResource(id = R.string.loaded_image)

@@ -10,4 +10,6 @@
     <string name="channel_description">Notifications for the Go Capture app</string>
     <string name="notification_title">SGF file ready</string>
     <string name="notification_content">Your SGF file is here. You can find it in the Downloads folder on your device.</string>
+    <string name="black_to_play">Black to play</string>
+    <string name="white_to_play">White to play</string>
 </resources>

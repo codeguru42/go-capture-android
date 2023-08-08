@@ -2,6 +2,7 @@ package codeguru.gocapture.ui
 
 import android.app.Activity
 import android.net.Uri
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -52,12 +53,14 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
                 Switch(checked = blackToPlay, onCheckedChange = setBlackToPlay)
                 Text(if (blackToPlay) stringResource(R.string.black_to_play) else stringResource(R.string.white_to_play))
             }
-            AsyncImage(
-                model = imageUri,
-                contentDescription = stringResource(id = R.string.loaded_image)
-            )
-            if (isProcessing) {
-                Processing(modifier = modifier)
+            Box {
+                AsyncImage(
+                    model = imageUri,
+                    contentDescription = stringResource(id = R.string.loaded_image)
+                )
+                if (isProcessing) {
+                    Processing(modifier = modifier)
+                }
             }
         }
     }

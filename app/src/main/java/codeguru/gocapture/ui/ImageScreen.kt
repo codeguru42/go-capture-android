@@ -3,6 +3,8 @@ package codeguru.gocapture.ui
 import android.app.Activity
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Upload
@@ -15,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -55,9 +58,21 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
                 model = imageUri,
                 contentDescription = stringResource(id = R.string.loaded_image)
             )
+            if (isProcessing) {
+                Processing(modifier = modifier)
+            }
         }
-        if (isProcessing) {
-            CircularProgressIndicator()
-        }
+    }
+}
+
+@Composable
+fun Processing(modifier: Modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.weight(1.0f))
+        CircularProgressIndicator()
+        Spacer(modifier = Modifier.weight(1.0f))
     }
 }

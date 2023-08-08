@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import codeguru.gocapture.GoCaptureRepository
+import codeguru.gocapture.MainActivity
 import codeguru.gocapture.R
 import coil.compose.AsyncImage
 import kotlinx.coroutines.CoroutineScope
@@ -54,8 +55,10 @@ private fun UploadButton(
     repository: GoCaptureRepository,
     imageUri: String?
 ) {
+    val activity = LocalContext.current as MainActivity
     FloatingActionButton(
         onClick = {
+            activity.requestNotificationPermission()
             setIsProcessing(true)
             CoroutineScope(Dispatchers.IO).launch {
                 repository.processImage(Uri.parse(imageUri))

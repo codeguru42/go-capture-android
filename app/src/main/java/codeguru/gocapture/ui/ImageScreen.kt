@@ -10,6 +10,10 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -24,11 +28,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: String?) {
     val repository = GoCaptureRepository(LocalContext.current as Activity)
+    var isProcessing by remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+                    isProcessing = true
                     CoroutineScope(Dispatchers.IO).launch {
                         repository.processImage(Uri.parse(imageUri))
                     }

@@ -15,5 +15,9 @@ interface GoCaptureService {
 
     @Multipart
     @POST("capture_async/")
-    suspend fun captureImageAsync(@Part image: MultipartBody.Part, @Part("fcm_registration_token") fcmRegistrationToken: RequestBody): Response<ResponseBody>
+    suspend fun captureImageAsync(
+        @Part image: MultipartBody.Part,
+        @Part("fcm_registration_token") fcmRegistrationToken: RequestBody,
+        @Part("to_play") toPlay: RequestBody?,
+    ): Response<ResponseBody>
 }

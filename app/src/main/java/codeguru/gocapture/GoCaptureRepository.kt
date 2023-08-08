@@ -28,7 +28,11 @@ class GoCaptureRepository(private val activity: Activity) {
         .baseUrl(BuildConfig.API_BASE_URL)
         .build()
 
-    suspend fun processImage(imageUri: Uri, setErrorMessage: (String?) -> Unit) {
+    suspend fun processImage(
+        imageUri: Uri,
+        setErrorMessage: (String?) -> Unit,
+        blackToPlay: Boolean
+    ) {
         val fileName = getFilename(imageUri)
         val imageStream = activity.contentResolver.openInputStream(imageUri)
         imageStream?.let {
@@ -46,9 +50,10 @@ class GoCaptureRepository(private val activity: Activity) {
                     null
                 )
                 Log.d("GoCapture", "token: $fcmRegistrationToken")
+                val toPlay = RequestBody.create("text/plain".toMediaType(), if (blackToPlay) "B" else "W")
                 val response = fcmRegistrationToken?.let {
                     val fcmTokenPart = RequestBody.create("text/plain".toMediaType(), it)
-                    service.captureImageAsync(filePart, fcmTokenPart)
+                    service.captureImageAsync(filePart, fcmTokenPart, toPlay)
                 }
 
                 Log.d("GoCapture", "Response received")

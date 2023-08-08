@@ -45,7 +45,9 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
 
     Scaffold(
         modifier = modifier,
-        floatingActionButton = { UploadButton(repository, imageUri, setIsProcessing, setErrorMessage) },
+        floatingActionButton = {
+            UploadButton(repository, imageUri, blackToPlay, setIsProcessing, setErrorMessage)
+        },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { contentPadding ->
         Column(modifier = Modifier.padding(contentPadding)) {
@@ -76,6 +78,7 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
 private fun UploadButton(
     repository: GoCaptureRepository,
     imageUri: String?,
+    blackToPlay: Boolean,
     setIsProcessing: (Boolean) -> Unit,
     setErrorMessage: (String?) -> Unit,
 ) {
@@ -85,7 +88,7 @@ private fun UploadButton(
             activity.requestNotificationPermission()
             setIsProcessing(true)
             CoroutineScope(Dispatchers.IO).launch {
-                repository.processImage(Uri.parse(imageUri), setErrorMessage)
+                repository.processImage(Uri.parse(imageUri), setErrorMessage, blackToPlay)
                 setIsProcessing(false)
             }
         }

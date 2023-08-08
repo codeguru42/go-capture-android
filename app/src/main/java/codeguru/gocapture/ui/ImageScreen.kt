@@ -13,10 +13,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,26 +30,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: String?) {
     val repository = GoCaptureRepository(LocalContext.current as Activity)
-    var isProcessing by remember { mutableStateOf(false) }
+    val (isProcessing, setIsProcessing) = remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier,
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    isProcessing = true
-                    CoroutineScope(Dispatchers.IO).launch {
-                        repository.processImage(Uri.parse(imageUri))
-                        isProcessing = false
-                    }
-                }
-            ) {
-                Icon(
-                    Icons.Filled.Upload,
-                    stringResource(id = R.string.upload_image)
-                )
-            }
-        }
+        floatingActionButton = { UploadButton(setIsProcessing, repository, imageUri) }
     ) { contentPadding ->
         Box(modifier = Modifier.padding(contentPadding)) {
             AsyncImage(
@@ -62,6 +45,28 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
                 Processing(modifier = modifier)
             }
         }
+    }
+}
+
+@Composable
+private fun UploadButton(
+    setIsProcessing: (Boolean) -> Unit,
+    repository: GoCaptureRepository,
+    imageUri: String?
+) {
+    FloatingActionButton(
+        onClick = {
+            setIsProcessing(true)
+            CoroutineScope(Dispatchers.IO).launch {
+                repository.processImage(Uri.parse(imageUri))
+                setIsProcessing(false)
+            }
+        }
+    ) {
+        Icon(
+            Icons.Filled.Upload,
+            stringResource(id = R.string.upload_image)
+        )
     }
 }
 

@@ -77,7 +77,7 @@ private fun ToPlaySwitch(
     setBlackToPlay: (Boolean) -> Unit
 ) {
     val toPlayMessage = if (blackToPlay) stringResource(R.string.black_to_play) else stringResource(R.string.white_to_play)
-    Row {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Switch(checked = blackToPlay, onCheckedChange = setBlackToPlay)
         Text(text = toPlayMessage)
     }

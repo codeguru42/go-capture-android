@@ -76,9 +76,10 @@ private fun ToPlaySwitch(
     blackToPlay: Boolean,
     setBlackToPlay: (Boolean) -> Unit
 ) {
+    val toPlayMessage = if (blackToPlay) stringResource(R.string.black_to_play) else stringResource(R.string.white_to_play)
     Row {
         Switch(checked = blackToPlay, onCheckedChange = setBlackToPlay)
-        Text(if (blackToPlay) stringResource(R.string.black_to_play) else stringResource(R.string.white_to_play))
+        Text(text = toPlayMessage)
     }
 }
 

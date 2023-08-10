@@ -51,10 +51,7 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { contentPadding ->
         Column(modifier = Modifier.padding(contentPadding)) {
-            Row {
-                Switch(checked = blackToPlay, onCheckedChange = setBlackToPlay)
-                Text(if (blackToPlay) stringResource(R.string.black_to_play) else stringResource(R.string.white_to_play))
-            }
+            ToPlaySwitch(blackToPlay, setBlackToPlay)
             Box {
                 AsyncImage(
                     model = imageUri,
@@ -71,6 +68,17 @@ fun ImageScreen(navController: NavHostController, modifier: Modifier, imageUri: 
         LaunchedEffect(snackbarHostState) {
             snackbarHostState.showSnackbar(errorMessage)
         }
+    }
+}
+
+@Composable
+private fun ToPlaySwitch(
+    blackToPlay: Boolean,
+    setBlackToPlay: (Boolean) -> Unit
+) {
+    Row {
+        Switch(checked = blackToPlay, onCheckedChange = setBlackToPlay)
+        Text(if (blackToPlay) stringResource(R.string.black_to_play) else stringResource(R.string.white_to_play))
     }
 }
 

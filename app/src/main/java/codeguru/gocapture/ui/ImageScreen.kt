@@ -101,7 +101,7 @@ private fun UploadButton(
 }
 
 @Composable
-fun Processing(modifier: Modifier) {
+private fun Processing(modifier: Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
